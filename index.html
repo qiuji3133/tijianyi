@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3分钟，测出你项目真正的死穴</title>
+<style>
+  :root{
+    --bg:#faf6ef; --card:#fffdf8; --ink:#3a2e24; --brown:#8a5a3b;
+    --red:#b5452e; --gold:#c9a26a; --line:#e8ddd0; --shadow:0 6px 24px rgba(120,80,40,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Microsoft YaHei",-apple-system,"PingFang SC",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;}
+  .wrap{max-width:640px;margin:0 auto;padding:28px 20px 80px;}
+  /* header */
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;}
+  .brand .logo{width:30px;height:30px;border-radius:9px;background:var(--brown);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .top .link{color:var(--red);font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;}
+
+  /* hero */
+  .hero{margin-bottom:26px;}
+  .tag{display:inline-block;background:#fff;border-radius:20px;padding:4px 14px;font-size:12px;color:var(--brown);border:1px solid var(--line);margin-bottom:14px;}
+  .hero h1{font-size:34px;line-height:1.25;font-weight:800;}
+  .hero h1 .acc{color:var(--red);}
+  .hero p{color:#7a6a5a;margin-top:10px;font-size:15px;}
+  .btn-hero{display:inline-block;margin-top:20px;padding:14px 34px;background:linear-gradient(135deg,var(--gold),var(--brown));color:#fff;font-size:17px;font-weight:700;border:none;border-radius:30px;cursor:pointer;box-shadow:0 6px 18px rgba(154,108,66,.3);}
+  .chips{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap;}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--brown);}
+
+  /* card */
+  .card{background:var(--card);border-radius:18px;padding:28px 24px;box-shadow:var(--shadow);margin-bottom:22px;}
+  .step-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .step-label .st{font-size:12px;color:var(--brown);background:#f4ecdf;padding:3px 10px;border-radius:12px;}
+  .step-label .pct{font-size:13px;color:var(--red);font-weight:700;}
+  .q-label{font-size:13px;color:var(--red);font-weight:700;margin-bottom:8px;}
+  .card h2{font-size:22px;font-weight:700;margin-bottom:6px;}
+  .card .sub{font-size:13px;color:#9a8a78;margin-bottom:20px;}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:15px 16px;font-size:16px;margin-bottom:12px;cursor:pointer;transition:.15s;color:var(--ink);}
+  .opt:hover{border-color:var(--brown);background:#fdf8f0;}
+  .opt.sel{border-color:var(--red);background:#fdf1ec;}
+  input[type=text]{width:100%;padding:14px 16px;font-size:16px;border:2px solid var(--line);border-radius:14px;outline:none;background:#fff;}
+  input[type=text]:focus{border-color:var(--brown);}
+  .nav-btns{display:flex;gap:12px;margin-top:8px;}
+  .btn{flex:1;padding:14px;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;}
+  .btn-prev{background:#f0e8da;color:#6a5a48;}
+  .btn-next{background:linear-gradient(135deg,var(--gold),var(--brown));color:#fff;}
+
+  .progress{height:6px;background:#eee3d5;border-radius:6px;overflow:hidden;margin:18px 0 6px;}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .3s;}
+
+  /* result */
+  .scorebox{text-align:center;padding:10px 0 4px;}
+  .score{font-size:64px;font-weight:800;color:var(--red);line-height:1;}
+  .scoreunit{font-size:18px;color:var(--brown);font-weight:700;}
+  .verdict{font-size:17px;font-weight:700;margin-top:10px;}
+  .bar{width:100%;height:10px;background:#eee3d5;border-radius:8px;margin:16px 0;}
+  .bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--gold),var(--red));}
+  .sec-title{font-size:14px;color:var(--red);font-weight:700;margin:20px 0 8px;display:flex;align-items:center;gap:6px;}
+  .block{background:#fbf6ee;border-radius:12px;padding:16px;font-size:15px;margin-bottom:10px;}
+  .block b{color:var(--brown);}
+  .cta{text-align:center;margin-top:24px;}
+  .cta .btn-hero{width:100%;}
+  .wxhint{font-size:12px;color:#9a8a78;margin-top:12px;text-align:center;}
+
+  /* bottom tab */
+  .tabbar{position:fixed;bottom:0;left:0;right:0;max-width:640px;margin:0 auto;background:#fff;border-top:1px solid var(--line);display:flex;}
+  .tab{flex:1;text-align:center;padding:10px 0;font-size:13px;color:#9a8a78;cursor:pointer;}
+  .tab.active{color:var(--red);font-weight:700;}
+  .hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== 首页 ===== -->
+  <div id="home">
+    <div class="top">
+      <div class="brand"><span class="logo">✦</span>项目死穴自测</div>
+      <a class="link" onclick="goReport()">我的报告</a>
+    </div>
+    <div class="hero">
+      <span class="tag">✦ 3分钟 · 免费自测</span>
+      <h1>3分钟，<br><span class="acc">测出你项目真正的死穴</span></h1>
+      <p>同样是做实体产品，有人已经用AI跑通了，<br>为什么你还停在原地打转？<br>先别急着换产品，测测你卡在哪。</p>
+      <button class="btn-hero" onclick="start()">开始检测 ➤</button>
+      <div class="chips">
+        <span class="chip">手上有个项目</span>
+        <span class="chip">一个人硬扛</span>
+        <span class="chip">越做越累</span>
+        <span class="chip">不知道卡在哪</span>
+      </div>
+    </div>
+    <div class="card">
+      <h2>测完你会得到</h2>
+      <div class="block">01　看清死穴 —— 你真正卡的是「方法」还是「没人带」</div>
+      <div class="block">02　看懂原因 —— 为什么越努力越孤单、越卖越累</div>
+      <div class="block">03　拿到方向 —— 一套能复制的工作流，再加一个带你走的人</div>
+    </div>
+  </div>
+
+  <!-- ===== 答题 ===== -->
+  <div id="quiz" class="hidden">
+    <div class="step-label">
+      <span class="st" id="stepTag">STEP 1/12</span>
+      <span class="pct" id="pctTag">8%</span>
+    </div>
+    <div class="card" id="qCard"></div>
+    <div class="progress"><i id="progBar" style="width:8%"></i></div>
+    <div class="nav-btns">
+      <button class="btn btn-prev" id="prevBtn" onclick="prev()">上一题</button>
+      <button class="btn btn-next" id="nextBtn" onclick="next()">下一题</button>
+    </div>
+  </div>
+
+  <!-- ===== 报告 ===== -->
+  <div id="report" class="hidden">
+    <div class="top" style="justify-content:space-between;">
+      <div class="brand"><span class="logo">✦</span>你的死穴诊断报告</div>
+      <a class="link" onclick="goHome()">首页</a>
+    </div>
+    <div class="card">
+      <div class="scorebox">
+        <span class="score" id="rScore">--</span><span class="scoreunit">/100 · 同路指数</span>
+        <div class="verdict" id="rVerdict"></div>
+      </div>
+      <div class="bar"><i id="rBar" style="width:0%"></i></div>
+    </div>
+    <div class="card">
+      <div class="sec-title">✦ 犀利诊断</div>
+      <div class="block" id="rDiagnosis"></div>
+    </div>
+    <div class="card">
+      <div class="sec-title">✦ 你的关键卡点拆解</div>
+      <div class="block"><b>你正在遇到：</b><span id="rMeet"></span></div>
+      <div class="block"><b>继续拖下去：</b><span id="rWait"></span></div>
+      <div class="block"><b>先这样补：</b><span id="rFix"></span></div>
+    </div>
+    <div class="cta">
+      <button class="btn-hero" onclick="revealCTA()">先留个微信，我才能把方案发到你手里 ➤</button>
+      <div class="wxhint" id="wxReveal" class="hidden" style="margin-top:16px;font-size:14px;color:var(--brown);">
+        加丘吉微信，报告一对一发你，再领一份《实体产品版·AI智能体使用指南》<br><br>① 先交 99 块试水，7天我帮你搭一个「卖实体产品的智能体」<br>② 这 99 不白花，直接抵你后面陪跑的钱<br><br>微信号：gdljs33
+      </div>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <div class="tab active" onclick="goHome()">🏠 首页</div>
+    <div class="tab" onclick="goReport()">📄 我的报告</div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {label:"怎么称呼你？", sub:"报告会更像一场面对面聊。", type:"text", key:"name"},
+  {label:"你现在算哪种状态？", sub:"一句话，先定位你自己。", type:"select", key:"role", opts:["线上创业 / 一人公司", "手上有个项目在做", "还在观望想启动", "上班族想搞副业"]},
+  {label:"你手上有正在做的项目吗？", sub:"实事求是选就行。", type:"select", key:"hasProject", opts:["有，正在推进", "有一个，但推不动", "有想法，还没落地", "还没有，纯了解"]},
+  {label:"这件事你一个人扛了多久？", sub:"", type:"select", key:"solo", opts:["刚起步（3个月内）", "半年左右", "一年以上", "断断续续很多年了"]},
+  {label:"你现在最缺的是哪一样？", sub:"这是最关键的一题。", type:"select", key:"lack", opts:["不是缺产品，是缺方法", "缺一个有结果的人带", "缺一起干的同路人", "缺AI和系统这种新打法"]},
+  {label:"你身边有没有人带你？", sub:"", type:"select", key:"mentor", opts:["完全没有，全靠自己", "有，但只教了皮毛", "有，但方向对不对心里没底", "没想过要找"]},
+  {label:"你对AI帮你做生意怎么看？", sub:"", type:"select", key:"ai", opts:["听过但不会用", "想用，但不知道从哪下手", "已经用了一点，效果一般", "完全不了解"]},
+  {label:"你为这件事花过钱买课/找方法吗？", sub:"", type:"select", key:"paid", opts:["花了不少，没见效", "花过一点", "一直自己琢磨没花过", "正准备花钱找方向"]},
+  {label:"你现在最想解决什么？", sub:"", type:"select", key:"want", opts:["把手上项目真正做起来", "找到靠谱的人带我走一遍", "学会用AI和系统代替硬扛", "找一个能一起干的团队"]},
+  {label:"你对「陪跑」这种带法怎么看？", sub:"", type:"select", key:"peipao", opts:["很需要，我就缺个人带", "没试过，可以了解", "担心又是割韭菜", "更喜欢自己学"]},
+  {label:"你愿意为自己的成长投入吗？", sub:"", type:"select", key:"invest", opts:["愿意，只要清楚值不值", "看价格，性价比到位就上", "还没想好", "先免费看看"]},
+  {label:"30天内，你希望发生什么？", sub:"", type:"select", key:"goal", opts:["跑通一条能复制的方法", "有人带我迈出第一步", "找到同频的伙伴", "先把这个方向想清楚"]},
+];
+
+let idx = 0, answers = {}, selTmp = null;
+const TOTAL = questions.length;
+
+function start(){ document.getElementById('home').classList.add('hidden'); document.getElementById('quiz').classList.remove('hidden'); idx=0; selTmp=null; renderQ(); }
+function goHome(){ document.getElementById('quiz').classList.add('hidden'); document.getElementById('report').classList.add('hidden'); document.getElementById('home').classList.remove('hidden'); }
+function goReport(){ if(Object.keys(answers).length===0){ alert("先完成检测，才能生成报告哦"); return; } finish(); }
+
+function renderQ(){
+  const q = questions[idx];
+  const card = document.getElementById('qCard');
+  const tag = document.getElementById('stepTag');
+  const pct = document.getElementById('pctTag');
+  const bar = document.getElementById('progBar');
+  tag.textContent = `STEP ${idx+1}/${TOTAL}`;
+  const pp = Math.round(((idx+1)/TOTAL)*100);
+  pct.textContent = pp + "%"; bar.style.width = pp + "%";
+  document.getElementById('prevBtn').style.visibility = idx===0 ? 'hidden' : 'visible';
+  document.getElementById('nextBtn').textContent = idx===TOTAL-1 ? '生成报告' : '下一题';
+
+  let html = `<div class="q-label">问题 ${idx+1}</div><h2>${q.label}</h2>`;
+  if(q.sub) html += `<div class="sub">${q.sub}</div>`;
+  if(q.type === 'text'){
+    html += `<input type="text" id="txtIn" placeholder="输入你的称呼" value="${answers[q.key]||''}">`;
+  } else {
+    html += q.opts.map(o=>{
+      const on = answers[q.key] === o;
+      return `<button class="opt" onclick="pick(this,'${o}')" style="${on?'border-color:var(--red);background:#fdf1ec;':''}">${o}</button>`;
+    }).join('');
+  }
+  card.innerHTML = html;
+}
+
+function pick(el, v){ selTmp = v; document.querySelectorAll('.opt').forEach(x=>x.style.borderColor='var(--line)'); el.style.borderColor='var(--red)'; el.style.background='#fdf1ec'; }
+
+function next(){
+  if(idx === TOTAL-1){ finish(); return; }
+  const q = questions[idx];
+  if(q.type === 'text'){ answers[q.key] = document.getElementById('txtIn').value.trim() || '创业同路人'; }
+  else { if(selTmp || answers[q.key]) answers[q.key] = selTmp || answers[q.key]; selTmp=null; }
+  idx++; renderQ();
+}
+function prev(){ if(idx>0){ idx--; selTmp=null; renderQ(); } }
+
+function finish(){
+  const q = questions[idx];
+  if(q && q.type === 'text'){ answers[q.key] = document.getElementById('txtIn').value.trim() || '创业同路人'; }
+  else if(q && selTmp) answers[q.key] = selTmp;
+
+  // 评分逻辑：加权算出"同路指数"
+  let score = 50;
+  const a = answers;
+  if(a.role && (a.role.includes('创业')||a.role.includes('项目'))) score+=8;
+  if(a.hasProject && a.hasProject.includes('有')) score+=6;
+  if(a.solo && (a.solo.includes('一年')||a.solo.includes('多年'))) score-=6;
+  if(a.lack && (a.lack.includes('方法')||a.lack.includes('人带')||a.lack.includes('同路人')||a.lack.includes('AI'))) score+=12;
+  if(a.mentor && a.mentor.includes('完全')) score-=8;
+  if(a.ai && (a.ai.includes('想用')||a.ai.includes('不会'))) score+=6;
+  if(a.want && (a.want.includes('走一遍')||a.want.includes('做起来')||a.want.includes('AI'))) score+=8;
+  if(a.peipao && a.peipao.includes('很需要')) score+=10;
+  if(a.invest && a.invest.includes('愿意')) score+=6;
+  if(a.goal && (a.goal.includes('跑通')||a.goal.includes('带我'))) score+=6;
+  score = Math.max(20, Math.min(96, score));
+
+  let verdict, diag, meet, wait, fix;
+  const name = answers.name || a.name || '创业同路人';
+  if(score >= 80){
+    verdict = `${name}，你就是我们要找的同路人`;
+    diag = `你不是缺项目，是缺「系统 + 一个带你走的人」。你手上已经攥着一个项目，还愿意为自己投入、渴望有人带真正跑一遍——这种同频的人，最值钱。`;
+    meet = "你一个人扛着项目，有梦想也有执行力，但卡在「方法」和「没人带」上。";
+    wait = "再硬扛下去，只会越卖越累，最后把缘分耗光，项目也凉了。";
+    fix = "先别急着找下一个项目。缺的是一套能复制的系统、和一个有真实结果的人陪你走。";
+  } else if(score >= 60){
+    verdict = `${name}，你正卡在「有念头、缺路」这一环`;
+    diag = `你心里有想法，也认同要用新打法（AI/系统）改变现状，但方向还没人帮你理清。你现在最需要的是先看清自己卡在哪，再决定往哪发力。`;
+    meet = "你有方向感，但没形成一条能走通的路，容易东一榔头西一棒子。";
+    wait = "一直停在「我再想想」，热情会被时间磨没。";
+    fix = "先让有结果的人帮你把方向理清，把「做什么」和「谁带你」定下来。";
+  } else {
+    verdict = `${name}，你现在更需要先「看明白」再「下手」`;
+    diag = `你还在观望阶段，对项目和AI的打法都还不清晰。没关系，这个阶段最该做的是先了解、先看清，而不是急着投入。`;
+    meet = "你还没找到真正想干、且干得动的那件事。";
+    wait = "越观望越焦虑，最后可能错过窗口。";
+    fix = "先花点时间认识系统、认识AI、认识价值观，看清了再决定要不要一起走。";
+  }
+
+  document.getElementById('rScore').textContent = score;
+  document.getElementById('rBar').style.width = score + '%';
+  document.getElementById('rVerdict').textContent = verdict;
+  document.getElementById('rDiagnosis').textContent = diag;
+  document.getElementById('rMeet').textContent = meet;
+  document.getElementById('rWait').textContent = wait;
+  document.getElementById('rFix').textContent = fix;
+
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('report').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+
+function revealCTA(){
+  document.getElementById('wxReveal').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
