@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3分钟，测出你项目真正的死穴</title>
+<title>3分钟，找到你项目的卡点</title>
 <style>
   :root{
     --bg:#faf6ef; --card:#fffdf8; --ink:#3a2e24; --brown:#8a5a3b;
@@ -76,13 +76,13 @@
   <!-- ===== 首页 ===== -->
   <div id="home">
     <div class="top">
-      <div class="brand"><span class="logo">✦</span>项目死穴自测</div>
+      <div class="brand"><span class="logo">✦</span>项目卡点自测</div>
       <a class="link" onclick="goReport()">我的报告</a>
     </div>
     <div class="hero">
       <span class="tag">✦ 3分钟 · 免费自测</span>
-      <h1>3分钟，<br><span class="acc">测出你项目真正的死穴</span></h1>
-      <p>同样是做实体产品，有人已经用AI跑通了，<br>为什么你还停在原地打转？<br>先别急着换产品，测测你卡在哪。</p>
+      <h1>3分钟，<br><span class="acc">找到你项目的卡点</span></h1>
+      <p>不是产品不行，是你的「营销系统」漏了。<br>同样是做实体产品，有人已经用AI跑通了，<br>为什么你还停在原地打转？<br>先别急着换产品，测测你卡在哪。</p>
       <button class="btn-hero" onclick="start()">开始检测 ➤</button>
       <div class="chips">
         <span class="chip">手上有个项目</span>
@@ -93,7 +93,7 @@
     </div>
     <div class="card">
       <h2>测完你会得到</h2>
-      <div class="block">01　看清死穴 —— 你真正卡的是「方法」还是「没人带」</div>
+      <div class="block">01　看清卡点 —— 你真正卡的是「营销系统」还是「没人带」</div>
       <div class="block">02　看懂原因 —— 为什么越努力越孤单、越卖越累</div>
       <div class="block">03　拿到方向 —— 一套能复制的工作流，再加一个带你走的人</div>
     </div>
@@ -116,12 +116,12 @@
   <!-- ===== 报告 ===== -->
   <div id="report" class="hidden">
     <div class="top" style="justify-content:space-between;">
-      <div class="brand"><span class="logo">✦</span>你的死穴诊断报告</div>
+      <div class="brand"><span class="logo">✦</span>你的卡点诊断报告</div>
       <a class="link" onclick="goHome()">首页</a>
     </div>
     <div class="card">
       <div class="scorebox">
-        <span class="score" id="rScore">--</span><span class="scoreunit">/100 · 同路指数</span>
+        <span class="score" id="rScore">--</span><span class="scoreunit">/40 · 卡点诊断分</span>
         <div class="verdict" id="rVerdict"></div>
       </div>
       <div class="bar"><i id="rBar" style="width:0%"></i></div>
@@ -131,7 +131,7 @@
       <div class="block" id="rDiagnosis"></div>
     </div>
     <div class="card">
-      <div class="sec-title">✦ 你的关键卡点拆解</div>
+      <div class="sec-title">✦ 你的卡点拆解</div>
       <div class="block"><b>你正在遇到：</b><span id="rMeet"></span></div>
       <div class="block"><b>继续拖下去：</b><span id="rWait"></span></div>
       <div class="block"><b>先这样补：</b><span id="rFix"></span></div>
@@ -152,18 +152,18 @@
 
 <script>
 const questions = [
-  {label:"怎么称呼你？", sub:"报告会更像一场面对面聊。", type:"text", key:"name"},
-  {label:"你现在算哪种状态？", sub:"一句话，先定位你自己。", type:"select", key:"role", opts:["线上创业 / 一人公司", "手上有个项目在做", "还在观望想启动", "上班族想搞副业"]},
-  {label:"你手上有正在做的项目吗？", sub:"实事求是选就行。", type:"select", key:"hasProject", opts:["有，正在推进", "有一个，但推不动", "有想法，还没落地", "还没有，纯了解"]},
-  {label:"这件事你一个人扛了多久？", sub:"", type:"select", key:"solo", opts:["刚起步（3个月内）", "半年左右", "一年以上", "断断续续很多年了"]},
-  {label:"你现在最缺的是哪一样？", sub:"这是最关键的一题。", type:"select", key:"lack", opts:["不是缺产品，是缺方法", "缺一个有结果的人带", "缺一起干的同路人", "缺AI和系统这种新打法"]},
-  {label:"你身边有没有人带你？", sub:"", type:"select", key:"mentor", opts:["完全没有，全靠自己", "有，但只教了皮毛", "有，但方向对不对心里没底", "没想过要找"]},
-  {label:"你对AI帮你做生意怎么看？", sub:"", type:"select", key:"ai", opts:["听过但不会用", "想用，但不知道从哪下手", "已经用了一点，效果一般", "完全不了解"]},
-  {label:"你为这件事花过钱买课/找方法吗？", sub:"", type:"select", key:"paid", opts:["花了不少，没见效", "花过一点", "一直自己琢磨没花过", "正准备花钱找方向"]},
-  {label:"你现在最想解决什么？", sub:"", type:"select", key:"want", opts:["把手上项目真正做起来", "找到靠谱的人带我走一遍", "学会用AI和系统代替硬扛", "找一个能一起干的团队"]},
-  {label:"你对「陪跑」这种带法怎么看？", sub:"", type:"select", key:"peipao", opts:["很需要，我就缺个人带", "没试过，可以了解", "担心又是割韭菜", "更喜欢自己学"]},
-  {label:"你愿意为自己的成长投入吗？", sub:"", type:"select", key:"invest", opts:["愿意，只要清楚值不值", "看价格，性价比到位就上", "还没想好", "先免费看看"]},
-  {label:"30天内，你希望发生什么？", sub:"", type:"select", key:"goal", opts:["跑通一条能复制的方法", "有人带我迈出第一步", "找到同频的伙伴", "先把这个方向想清楚"]},
+  {label:"怎么称呼你？", sub:"报告会更像一场面对面的诊断。", type:"text", key:"name"},
+  {label:"你是谁？一句话别人能记住你吗？", sub:"K1·IP定位", type:"select", key:"ip", opts:["能，一句就能说清楚", "怎么说都觉得和同行没区别", "定位模糊，自己也说不清", "从没想过这个问题"]},
+  {label:"你的客户，是怎么找到你的？", sub:"K3·点人成金", type:"select", key:"find", opts:["朋友介绍/转介绍", "朋友圈", "社群", "广告投放", "基本靠碰运气", "不知道"]},
+  {label:"你的战场布好了吗？", sub:"K4·点场成金（朋友圈+社群+私聊的联动）", type:"select", key:"field", opts:["有，全盘布过了", "朋友圈在发，但没联动", "只在社群里发广告", "完全没布局，想到哪发到哪"]},
+  {label:"客户买完一次，还会再来吗？", sub:"K5·忠诚度", type:"select", key:"loyal", opts:["有复购、有粉丝群", "老客户满意但很少回购", "基本是一锤子买卖", "还没有稳定成交的客户"]},
+  {label:"你会「算账」让客户觉得值吗？", sub:"K6·点商成金", type:"select", key:"settle", opts:["会，能算出「不买就亏」", "只会说好，不会说「值」", "有优惠活动，没别的", "没设计过成交主张"]},
+  {label:"你用AI帮你赚钱了吗？", sub:"K7·AI智能体", type:"select", key:"ai", opts:["已经用了，自动回复/自动发内容", "想用，不知道从哪下手", "听过但不会用", "全靠手动，累死自己"]},
+  {label:"有人帮你卖吗？", sub:"K8·生态联盟", type:"select", key:"ally", opts:["有渠道合作、有转介绍机制", "想找但没找到人", "全靠自己单打独斗", "没想过借力"]},
+  {label:"客户会主动帮你转介绍吗？", sub:"K9·价值传承", type:"select", key:"refer", opts:["会，有奖励机制", "客户满意但不会主动说", "很少，不知道怎么触发", "完全没有"]},
+  {label:"你有系统，还是靠「打零工」？", sub:"K10·点道为金（SOP/标准流程）", type:"select", key:"sys", opts:["有SOP、有标准流程", "有意识但没固化下来", "每次靠状态、靠运气", "完全没系统"]},
+  {label:"你现在最想解决什么？", sub:"你最痛的一环", type:"select", key:"want", opts:["把手上项目真正做成", "找到靠谱的人带我走一遍", "用AI和系统代替硬扛", "先搞清楚自己卡在哪"]},
+  {label:"愿意为自己的破局投入吗？", sub:"", type:"select", key:"invest", opts:["愿意，只要清楚值不值", "看性价比，到位就上", "还没想好", "先免费看看"]},
 ];
 
 let idx = 0, answers = {}, selTmp = null;
@@ -214,41 +214,56 @@ function finish(){
   if(q && q.type === 'text'){ answers[q.key] = document.getElementById('txtIn').value.trim() || '创业同路人'; }
   else if(q && selTmp) answers[q.key] = selTmp;
 
-  // 评分逻辑：加权算出"同路指数"
-  let score = 50;
+  // 评分逻辑：每个维度 0-4 分，A最优=4，B=3，C=2，D=1，E=0
+  let score = 0;
   const a = answers;
-  if(a.role && (a.role.includes('创业')||a.role.includes('项目'))) score+=8;
-  if(a.hasProject && a.hasProject.includes('有')) score+=6;
-  if(a.solo && (a.solo.includes('一年')||a.solo.includes('多年'))) score-=6;
-  if(a.lack && (a.lack.includes('方法')||a.lack.includes('人带')||a.lack.includes('同路人')||a.lack.includes('AI'))) score+=12;
-  if(a.mentor && a.mentor.includes('完全')) score-=8;
-  if(a.ai && (a.ai.includes('想用')||a.ai.includes('不会'))) score+=6;
-  if(a.want && (a.want.includes('走一遍')||a.want.includes('做起来')||a.want.includes('AI'))) score+=8;
-  if(a.peipao && a.peipao.includes('很需要')) score+=10;
-  if(a.invest && a.invest.includes('愿意')) score+=6;
-  if(a.goal && (a.goal.includes('跑通')||a.goal.includes('带我'))) score+=6;
-  score = Math.max(20, Math.min(96, score));
+  const scoreMap = {
+    ip: {0:4,1:2,2:1,3:1},
+    find: {0:4,1:3,2:3,3:3,4:1,5:0},
+    field: {0:4,1:3,2:2,3:1},
+    loyal: {0:4,1:3,2:2,3:1},
+    settle: {0:4,1:2,2:3,3:1},
+    ai: {0:4,1:3,2:2,3:1},
+    ally: {0:4,1:3,2:2,3:1},
+    refer: {0:4,1:3,2:2,3:1},
+    sys: {0:4,1:3,2:2,3:1},
+  };
+  let cnt = 0;
+  for(const k in scoreMap){
+    if(a[k] !== undefined){
+      const opts = questions.find(q=>q.key===k).opts;
+      const idx = opts.indexOf(a[k]);
+      if(idx >= 0){ score += scoreMap[k][idx]; cnt++; }
+    }
+  }
+  if(a.invest && a.invest.includes('愿意')) score += 2;
+  if(a.want && (a.want.includes('做成')||a.want.includes('带我'))) score += 2;
+  // 归一化到 40 分总分（K4 三档制）
+  score = Math.round((score / Math.max(1,cnt)) * 10 * 2); // 每维度均值*10，10题约40分
+  score = Math.max(8, Math.min(40, score));
+  // 修正：把分数映射到 K4 区间口径
+  if(score >= 35) score = 38;
 
   let verdict, diag, meet, wait, fix;
-  const name = answers.name || a.name || '创业同路人';
-  if(score >= 80){
-    verdict = `${name}，你就是我们要找的同路人`;
-    diag = `你不是缺项目，是缺「系统 + 一个带你走的人」。你手上已经攥着一个项目，还愿意为自己投入、渴望有人带真正跑一遍——这种同频的人，最值钱。`;
-    meet = "你一个人扛着项目，有梦想也有执行力，但卡在「方法」和「没人带」上。";
-    wait = "再硬扛下去，只会越卖越累，最后把缘分耗光，项目也凉了。";
-    fix = "先别急着找下一个项目。缺的是一套能复制的系统、和一个有真实结果的人陪你走。";
-  } else if(score >= 60){
-    verdict = `${name}，你正卡在「有念头、缺路」这一环`;
-    diag = `你心里有想法，也认同要用新打法（AI/系统）改变现状，但方向还没人帮你理清。你现在最需要的是先看清自己卡在哪，再决定往哪发力。`;
-    meet = "你有方向感，但没形成一条能走通的路，容易东一榔头西一棒子。";
-    wait = "一直停在「我再想想」，热情会被时间磨没。";
-    fix = "先让有结果的人帮你把方向理清，把「做什么」和「谁带你」定下来。";
+  const name = answers.name || '创业同路人';
+  if(score >= 31){
+    verdict = `${name}，你已经有框架了，但缺「爆点」`;
+    diag = `你不是不会做，是系统基本搭起来了、却总差最后那一口气出不了爆单。你的问题不在产品，在「成交主张」——你还没有让客户觉得「不买就亏」的那一下。`;
+    meet = "你懂布局、有体系，但成交主张不够锋利，客户看得见你的好，却下不了单。";
+    wait = "一直这么平推下去，热情会被耗光，最后变成「明明什么都做对了，就是没钱赚」。";
+    fix = "先把你的「成交主张」重新磨一遍——学会算账，让客户自己觉得该买。";
+  } else if(score >= 21){
+    verdict = `${name}，你有点基础，但没系统`;
+    diag = `你已经跑起来了，有些客户、也有些方法，但全靠一时状态硬撑，没有一套能自动转的「营销系统」。所以时好时坏、越做越累。`;
+    meet = "你有客户也有行动力，但缺「K4点场成金」这套体系——朋友圈、社群、私聊没有联动成一张收钱的网。";
+    wait = "没有系统的生意，就是在‘打零工’，状态好就赚、状态差就断，永远被动。";
+    fix = "补全一套体系：从价值诊断、成交诊断到扩张诊断，把每一步串成标准流程。";
   } else {
-    verdict = `${name}，你现在更需要先「看明白」再「下手」`;
-    diag = `你还在观望阶段，对项目和AI的打法都还不清晰。没关系，这个阶段最该做的是先了解、先看清，而不是急着投入。`;
-    meet = "你还没找到真正想干、且干得动的那件事。";
-    wait = "越观望越焦虑，最后可能错过窗口。";
-    fix = "先花点时间认识系统、认识AI、认识价值观，看清了再决定要不要一起走。";
+    verdict = `${name}，你的项目还在「裸奔」`;
+    diag = `你的痛点不是「产品不行」，是营销系统几乎是空的、还停在碰运气的阶段。不是你不努力，是你一直在用90年代的老办法硬扛。`;
+    meet = "你手里有项目、有梦想、有执行力，但「系统」这一环接近空白，连客户怎么来、怎么成交、怎么复购都没理清。";
+    wait = "继续裸奔，只会越卖越累，最后把项目耗凉。";
+    fix = "先停下来补齐系统——看清楚自己卡在营销系统的哪一环，再一个个补。";
   }
 
   document.getElementById('rScore').textContent = score;
